@@ -67,8 +67,9 @@ pub fn realize(
     for recipe in styles.recipes() {
         let guard = Guard::Nth(n);
         if recipe.applicable(target) && !target.is_guarded(guard) {
+            tracing::debug!("applying recipe {:?} to {:?}", recipe, target);
             if let Some(content) = try_apply(vt, target, recipe, guard)? {
-                realized = Some(content);
+                realized = Some(content.guarded(guard));
                 break;
             }
         }
